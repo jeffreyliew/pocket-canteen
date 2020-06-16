@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
+const users = require("./routes/api/users");
+
 const app = express();
 
 // middleware
@@ -18,6 +20,9 @@ mongoose
   })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
+
+// routes
+app.use("/api/users", users);
 
 const port = process.env.PORT || 5000;
 
