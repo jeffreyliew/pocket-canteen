@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const axios = require("axios");
+const passport = require("passport");
 
 const users = require("./routes/api/users");
 const canteen = require("./routes/api/canteen");
@@ -58,6 +59,12 @@ mongoose
     }
   })
   .catch((err) => console.log(err));
+
+// passport middleware
+app.use(passport.initialize());
+
+// passport Config
+require("./config/passport")(passport);
 
 // routes
 app.use("/api/users", users);
