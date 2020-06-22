@@ -35,7 +35,7 @@ class Landing extends Component {
 
                 <form onSubmit={this.onSubmit}>
                   <div className="row">
-                    <div className="col-md-6 m-auto">
+                    <div className="col-md-6 mx-auto mb-2">
                       <div className="form-group">
                         <div className="input-group">
                           <input
