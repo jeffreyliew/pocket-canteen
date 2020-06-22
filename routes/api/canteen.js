@@ -5,10 +5,12 @@ const router = express.Router();
 const Canteen = require("../../models/Canteen");
 
 // @route   GET api/canteen
-// @desc    Get list of canteens
+// @desc    Get list of canteens by city
 // @access  Public
 router.get("/", (req, res) => {
-  Canteen.find()
+  const cityCaseInsensitive = new RegExp(`^${req.query.city}$`, "i");
+
+  Canteen.find({ city: cityCaseInsensitive })
     .then((canteens) => {
       res.json(canteens);
     })
