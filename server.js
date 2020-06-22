@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const axios = require("axios");
 const passport = require("passport");
 
+const isEmpty = require("./validation/is-empty");
+
 const users = require("./routes/api/users");
 const canteen = require("./routes/api/canteen");
 
@@ -28,32 +30,49 @@ mongoose
     console.log("MongoDB Connected");
 
     try {
-      // get initial canteen data
-      const result = await axios.get("https://openmensa.org/api/v2/canteens");
-      result.data.map(async (data) => {
-        const canteenFields = {
-          id: data.id,
-          name: data.name,
-          city: data.city,
-          address: data.address,
-          coordinates: {
-            lat: data.coordinates[0],
-            long: data.coordinates[1],
-          },
-        };
+      // condition to break "do while"
+      let result;
+      // parameter for API call
+      let page = 1;
 
-        const canteen = await Canteen.findOne({ id: data.id });
+      do {
+        // get initial canteen data
+        result = await axios.get(
+          `https://openmensa.org/api/v2/canteens?page=${page}`
+        );
 
-        // check if record exists
-        if (canteen) {
-          // update
-          Canteen.updateOne({ id: canteen.id }, { $set: canteenFields });
-        } else {
-          // save new canteen
-          const savedCanteen = await new Canteen(canteenFields).save();
-          console.log(savedCanteen);
+        // if result is empty skip this part and end the loop
+        if (!isEmpty(result.data)) {
+          result.data.map(async (data) => {
+            if (isEmpty(data.coordinates)) return;
+
+            const canteenFields = {
+              id: data.id,
+              name: data.name,
+              city: data.city,
+              address: data.address,
+              coordinates: {
+                lat: data.coordinates[0],
+                long: data.coordinates[1],
+              },
+            };
+
+            const canteen = await Canteen.findOne({ id: data.id });
+
+            // check if record exists
+            if (canteen) {
+              // update
+              Canteen.updateOne({ id: canteen.id }, { $set: canteenFields });
+            } else {
+              // save new canteen
+              const savedCanteen = await new Canteen(canteenFields).save();
+              console.log(savedCanteen);
+            }
+          });
         }
-      });
+
+        page++;
+      } while (!isEmpty(result.data));
     } catch (err) {
       console.log(err);
     }
