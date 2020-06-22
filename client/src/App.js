@@ -14,6 +14,8 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import NotFound from "./components/not-found/NotFound";
 
+import ContentWrapper from "./components/common/ContentWrapper";
+
 import "./App.css";
 
 // check for token
@@ -43,9 +45,15 @@ class App extends Component {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Landing} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-            <Route path="*" component={NotFound} />
+            <Route>
+              <ContentWrapper>
+                <Switch>
+                  <Route exact path="/register" component={Register} />
+                  <Route exact path="/login" component={Login} />
+                  <Route path="*" component={NotFound} />
+                </Switch>
+              </ContentWrapper>
+            </Route>
           </Switch>
           <Footer />
         </Router>
