@@ -1,10 +1,46 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+import { getCanteensByCity } from "../../actions/canteenActions";
+
+import "./navbar.css";
 
 class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      city: "",
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onLogoutClick = this.onLogoutClick.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { queryCity } = this.props.canteen;
+    if (queryCity !== prevProps.canteen.queryCity) {
+      this.setState({ city: queryCity === null ? "" : queryCity });
+    }
+  }
+
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+
+    const { city } = this.state;
+
+    this.props.getCanteensByCity(city);
+    this.props.history.push(
+      `/canteen${city.length > 0 ? `?city=${city.toLowerCase()}` : ""}`
+    );
+  }
+
   onLogoutClick(e) {
     e.preventDefault();
     this.props.logoutUser();
@@ -18,7 +54,7 @@ class Navbar extends Component {
         <li className="nav-item">
           <button
             type="button"
-            onClick={this.onLogoutClick.bind(this)}
+            onClick={this.onLogoutClick}
             className="btn nav-link"
           >
             <i className="fas fa-user-circle rounded-circle mr-1" />
@@ -49,6 +85,33 @@ class Navbar extends Component {
           <Link className="navbar-brand" to="/">
             Home
           </Link>
+
+          {this.props.location.pathname !== "/" && (
+            <form
+              className="form-inline navbar__search"
+              onSubmit={this.onSubmit}
+            >
+              <div className="input-group input-group-sm">
+                <input
+                  className="form-control border-secondary bg-dark text-white"
+                  type="text"
+                  placeholder="Enter your city, e.g. Berlin"
+                  name="city"
+                  value={this.state.city}
+                  onChange={this.onChange}
+                />
+                <div className="input-group-append">
+                  <button
+                    type="submit"
+                    className="btn btn-secondary btn-block px-2"
+                  >
+                    <i className="fas fa-search" />
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
+
           <button
             className="navbar-toggler"
             type="button"
@@ -68,16 +131,20 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
+  getCanteensByCity: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
+  canteen: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  canteen: state.canteen,
 });
 
 const mapDispatchToProps = {
+  getCanteensByCity,
   logoutUser,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));
