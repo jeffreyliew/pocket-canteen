@@ -19,7 +19,11 @@ class Landing extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    console.log("submit");
+    const { city } = this.state;
+
+    this.props.history.push(
+      `/canteen${city.length > 0 ? `?city=${city.toLowerCase()}` : ""}`
+    );
   }
 
   render() {
