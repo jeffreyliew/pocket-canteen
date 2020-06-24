@@ -1,2 +1,5 @@
 export const GET_ERRORS = "GET_ERRORS";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const GET_CANTEENS = "GET_CANTEENS";
+export const CANTEEN_LOADING = "CANTEEN_LOADING";
+export const SET_QUERY_CITY = "SET_QUERY_CITY";
