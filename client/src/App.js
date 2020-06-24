@@ -12,6 +12,7 @@ import Landing from "./components/layout/Landing";
 import Footer from "./components/layout/Footer";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Canteens from "./components/canteens/Canteens";
 import NotFound from "./components/not-found/NotFound";
 
 import ContentWrapper from "./components/common/ContentWrapper";
@@ -50,6 +51,7 @@ class App extends Component {
                 <Switch>
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/login" component={Login} />
+                  <Route path="/canteen" component={Canteens} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </ContentWrapper>
