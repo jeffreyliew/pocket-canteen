@@ -18,8 +18,19 @@ class Canteens extends Component {
 
   componentDidMount() {
     const query = new URLSearchParams(this.props.location.search);
+    let city;
 
-    this.props.getCanteensByCity(query.get("city"));
+    if (query.get("city") !== null) {
+      city = query
+        .get("city")
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    } else {
+      city = query.get("city");
+    }
+
+    this.props.getCanteensByCity(city);
   }
 
   onChange(e) {

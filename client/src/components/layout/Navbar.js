@@ -34,8 +34,16 @@ class Navbar extends Component {
     e.preventDefault();
 
     const { city } = this.state;
+    let cityUpperCase;
 
-    this.props.getCanteensByCity(city);
+    if (city.length > 0) {
+      cityUpperCase = city
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
+
+    this.props.getCanteensByCity(city.length > 0 ? cityUpperCase : city);
     this.props.history.push(
       `/canteen${city.length > 0 ? `?city=${city.toLowerCase()}` : ""}`
     );
