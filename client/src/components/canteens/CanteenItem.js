@@ -9,7 +9,7 @@ class CanteenItem extends Component {
     return (
       <div className="col mb-4">
         <div className="card mx-0 h-100">
-          <h5 className="card-header">{name}</h5>
+          <h5 className="card-header text-center">{name}</h5>
 
           <div className="card-body bg-light">
             <h6 className="card-title my-0">City</h6>
