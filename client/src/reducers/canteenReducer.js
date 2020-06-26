@@ -2,11 +2,14 @@ import {
   GET_CANTEENS,
   CANTEEN_LOADING,
   SET_QUERY_CITY,
+  GET_CANTEEN,
+  GET_DATES_OF_CURRENT_WEEK,
 } from "../actions/types";
 
 const initialState = {
-  canteens: [],
   loading: false,
+  canteen: {},
+  canteens: [],
   queryCity: "",
 };
 
@@ -16,6 +19,15 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: true,
+      };
+    case GET_CANTEEN:
+      return {
+        ...state,
+        loading: false,
+        canteen: {
+          ...state.canteen,
+          ...action.payload,
+        },
       };
     case GET_CANTEENS:
       return {
@@ -27,6 +39,14 @@ export default function (state = initialState, action) {
       return {
         ...state,
         queryCity: action.payload,
+      };
+    case GET_DATES_OF_CURRENT_WEEK:
+      return {
+        ...state,
+        canteen: {
+          ...state.canteen,
+          week: action.payload,
+        },
       };
     default:
       return state;
