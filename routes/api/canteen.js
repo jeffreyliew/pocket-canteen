@@ -24,4 +24,15 @@ router.get("/", (req, res) => {
     .catch((err) => res.status(404).json(err));
 });
 
+// @route   GET api/canteen/:id
+// @desc    Get canteen by id
+// @access  Public
+router.get("/:id", (req, res) => {
+  Canteen.findOne({ id: req.params.id })
+    .then((canteen) => {
+      res.json(canteen);
+    })
+    .catch((err) => res.status(404).json(err));
+});
+
 module.exports = router;
