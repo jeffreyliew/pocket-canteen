@@ -13,6 +13,7 @@ import Footer from "./components/layout/Footer";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Canteens from "./components/canteens/Canteens";
+import Canteen from "./components/canteen/Canteen";
 import NotFound from "./components/not-found/NotFound";
 
 import ContentWrapper from "./components/common/ContentWrapper";
@@ -51,7 +52,8 @@ class App extends Component {
                 <Switch>
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/login" component={Login} />
-                  <Route path="/canteen" component={Canteens} />
+                  <Route exact path="/canteen" component={Canteens} />
+                  <Route path="/canteen/:id" component={Canteen} />
                   <Route path="*" component={NotFound} />
                 </Switch>
               </ContentWrapper>
