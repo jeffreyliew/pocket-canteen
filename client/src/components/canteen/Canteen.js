@@ -79,7 +79,9 @@ class Canteen extends Component {
                     <Link
                       to={`/canteen/${id}/meals?date=${day.date}`}
                       key={day.date}
-                      className="list-group-item list-group-item-action d-flex justify-content-between align-items-center font-weight-bold"
+                      className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center font-weight-bold ${
+                        closed ? "disabled" : ""
+                      }`}
                     >
                       {day.day}
                       <span
@@ -102,6 +104,14 @@ class Canteen extends Component {
     return (
       <div className="canteen">
         <div className="container">
+          <div className="row">
+            <div className="col-md-6">
+              <Link to="/canteen" className="btn btn-light mb-3 float-left">
+                Back To Canteens
+              </Link>
+            </div>
+            <div className="col-md-6" />
+          </div>
           <div className="row">
             <div className="col-md-12 mb-3">
               <h1 className="display-4 text-center">Canteen</h1>
