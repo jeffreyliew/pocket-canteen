@@ -24,10 +24,21 @@ class Canteen extends Component {
     const { id, name, city, address, week } = canteen;
 
     // get today's opening status
-    let closed;
+    let closedToday;
+    let today;
     if (!isEmpty(week) && week.length === 5) {
-      const today = new Date().toISOString();
-      closed = week.filter((day) => today.indexOf(day.date) !== -1)[0].closed;
+      today = new Date(
+        Date.now() - new Date().getTimezoneOffset() * 60000
+      ).toISOString();
+
+      const day = new Date();
+      // check if saturday or sunday
+      if (day.getDay() === 0 || day.getDay() === 6) {
+        closedToday = true;
+      } else {
+        closedToday = week.filter((day) => today.indexOf(day.date) !== -1)[0]
+          .closed;
+      }
     }
 
     let canteenContent;
@@ -61,10 +72,10 @@ class Canteen extends Component {
                   <div className="card-footer text-center">
                     <span
                       className={`font-weight-bold ${
-                        closed ? "text-danger" : "text-success"
+                        closedToday ? "text-danger" : "text-success"
                       }`}
                     >
-                      Today {closed ? "Closed" : "Open"}
+                      Today {closedToday ? "Closed" : "Open"}
                     </span>
                   </div>
                 )}
@@ -79,14 +90,19 @@ class Canteen extends Component {
                     <Link
                       to={`/canteen/${id}/meals?date=${day.date}`}
                       key={day.date}
-                      className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center font-weight-bold ${
-                        closed ? "disabled" : ""
-                      }`}
+                      className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${
+                        today.indexOf(day.date) !== -1 ? "active" : ""
+                      } ${day.closed ? "disabled" : ""}`}
                     >
-                      {day.day}
+                      <div className="d-flex flex-column">
+                        <span className="font-weight-bold">{day.day}</span>
+                        <small className="text-muted font-italic">
+                          {day.date}
+                        </small>
+                      </div>
                       <span
                         className={`badge badge-pill ${
-                          closed ? "badge-danger" : "badge-success"
+                          day.closed ? "badge-danger" : "badge-success"
                         }`}
                       >
                         {day.closed ? "Closed" : "Open"}
