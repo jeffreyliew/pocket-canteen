@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import isEmpty from "../../validation/is-empty";
 import { getMeals, getCanteenById } from "../../actions/canteenActions";
 
 import MealItem from "./MealItem";
@@ -54,33 +55,43 @@ class Meals extends Component {
         </div>
       );
     } else {
-      mealsContent = (
-        <div className="row">
-          <div className="col-md-12">
-            <p className="text-center font-italic">
-              <small>*prices = Students/Employees/Others</small>
-            </p>
+      if (isEmpty(sortedMeals)) {
+        mealsContent = (
+          <div className="row">
+            <div className="col-md-12">
+              <h4 className="text-center my-3">No meals found...</h4>
+            </div>
           </div>
-          <div className="col-md-12">
-            {Object.keys(sortedMeals).map((category, index) => (
-              <div key={index} className="card">
-                <h5 className="card-header text-center text-white bg-dark">
-                  {category}
-                </h5>
-                <div className="list-group list-group-flush">
-                  {sortedMeals[category].map((meal) => {
-                    return (
-                      <div key={meal.id} className="list-group-item">
-                        <MealItem meal={meal} />
-                      </div>
-                    );
-                  })}
+        );
+      } else {
+        mealsContent = (
+          <div className="row">
+            <div className="col-md-12">
+              <p className="text-center font-italic">
+                <small>*prices = Students/Employees/Others</small>
+              </p>
+            </div>
+            <div className="col-md-12">
+              {Object.keys(sortedMeals).map((category, index) => (
+                <div key={index} className="card">
+                  <h5 className="card-header text-center text-white bg-dark">
+                    {category}
+                  </h5>
+                  <div className="list-group list-group-flush">
+                    {sortedMeals[category].map((meal) => {
+                      return (
+                        <div key={meal.id} className="list-group-item">
+                          <MealItem meal={meal} />
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      );
+        );
+      }
     }
 
     return (
