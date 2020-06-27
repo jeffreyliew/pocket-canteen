@@ -7,6 +7,7 @@ import {
   SET_QUERY_CITY,
   GET_CANTEEN,
   GET_DATES_OF_CURRENT_WEEK,
+  GET_MEALS,
 } from "./types";
 
 // get canteens by city
@@ -78,6 +79,25 @@ export const getDatesOfCurrentWeek = (id, week) => (dispatch) => {
       payload: newWeek,
     });
   });
+};
+
+// get meals
+export const getMeals = (id, date) => (dispatch) => {
+  dispatch(setCanteenLoading());
+  axios
+    .get(`https://openmensa.org/api/v2/canteens/${id}/days/${date}/meals`)
+    .then((res) => {
+      dispatch({
+        type: GET_MEALS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+    });
 };
 
 // loading

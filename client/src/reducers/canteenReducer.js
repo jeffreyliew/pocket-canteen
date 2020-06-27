@@ -4,6 +4,7 @@ import {
   SET_QUERY_CITY,
   GET_CANTEEN,
   GET_DATES_OF_CURRENT_WEEK,
+  GET_MEALS,
 } from "../actions/types";
 
 const initialState = {
@@ -47,6 +48,15 @@ export default function (state = initialState, action) {
           ...state.canteen,
           week: action.payload,
         },
+      };
+    case GET_MEALS:
+      return {
+        ...state,
+        canteen: {
+          ...state.canteen,
+          meals: action.payload,
+        },
+        loading: false,
       };
     default:
       return state;

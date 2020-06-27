@@ -5,3 +5,4 @@ export const GET_CANTEEN = "GET_CANTEEN";
 export const CANTEEN_LOADING = "CANTEEN_LOADING";
 export const SET_QUERY_CITY = "SET_QUERY_CITY";
 export const GET_DATES_OF_CURRENT_WEEK = "GET_DATES_OF_CURRENT_WEEK";
+export const GET_MEALS = "GET_MEALS";
