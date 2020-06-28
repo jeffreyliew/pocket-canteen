@@ -8,6 +8,8 @@ import {
   GET_CANTEEN,
   GET_DATES_OF_CURRENT_WEEK,
   GET_MEALS,
+  GET_FAVOURITE_CANTEENS,
+  CLEAR_CANTEEN,
 } from "./types";
 
 // get canteens by city
@@ -100,6 +102,34 @@ export const getMeals = (id, date) => (dispatch) => {
     });
 };
 
+// get favourite canteens
+export const getFavouriteCanteens = () => (dispatch) => {
+  axios.get("/api/users/favourite/canteen").then((res) => {
+    dispatch({
+      type: GET_FAVOURITE_CANTEENS,
+      payload: res.data,
+    });
+  });
+};
+
+// add canteen to favourite
+export const addCanteenToFavourite = (id) => (dispatch) => {
+  axios
+    .post(`/api/users/favourite/canteen/${id}`)
+    .then((res) => {
+      dispatch({
+        type: GET_FAVOURITE_CANTEENS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
 // loading
 export const setCanteenLoading = () => {
   return {
@@ -110,4 +140,11 @@ export const setCanteenLoading = () => {
 // set city
 export const setCity = (city) => {
   return { type: SET_QUERY_CITY, payload: city };
+};
+
+// clear canteen
+export const clearCanteen = () => {
+  return {
+    type: CLEAR_CANTEEN,
+  };
 };

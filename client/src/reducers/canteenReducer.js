@@ -5,6 +5,8 @@ import {
   GET_CANTEEN,
   GET_DATES_OF_CURRENT_WEEK,
   GET_MEALS,
+  GET_FAVOURITE_CANTEENS,
+  CLEAR_CANTEEN,
 } from "../actions/types";
 
 const initialState = {
@@ -12,6 +14,7 @@ const initialState = {
   canteen: {},
   canteens: [],
   queryCity: "",
+  favouriteCanteens: [],
 };
 
 export default function (state = initialState, action) {
@@ -57,6 +60,16 @@ export default function (state = initialState, action) {
           meals: action.payload,
         },
         loading: false,
+      };
+    case GET_FAVOURITE_CANTEENS:
+      return {
+        ...state,
+        favouriteCanteens: action.payload,
+      };
+    case CLEAR_CANTEEN:
+      return {
+        ...state,
+        favouriteCanteens: [],
       };
     default:
       return state;
