@@ -4,7 +4,11 @@ const getCurrentWeek = () => {
 
   for (let i = 1; i <= 5; i++) {
     let day = curr.getDate() - curr.getDay() + i;
-    let date = new Date(curr.setDate(day)).toISOString().slice(0, 10);
+    let date = new Date(
+      curr.setDate(day) - new Date().getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .slice(0, 10);
     week.push(date);
   }
 
