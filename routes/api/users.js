@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secretOrKey = require("../../config/keys").secretOrKey;
@@ -84,5 +85,166 @@ router.post("/login", (req, res) => {
     });
   });
 });
+
+// @route   GET api/users/favourite/canteen
+// @desc    Get favourite canteens
+// @access  Private
+router.get(
+  "/favourite/canteen",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id)
+      .populate("favouriteCanteens.canteen")
+      .then((user) => res.json(user.favouriteCanteens));
+  }
+);
+
+// @route   POST api/users/favourite/canteen/:id
+// @desc    Add favourite canteen
+// @access  Private
+router.post(
+  "/favourite/canteen/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findOne({ _id: req.user.id }).then((user) => {
+      if (
+        user.favouriteCanteens.filter(
+          (canteen) => canteen.canteen.toString() === req.params.id
+        ).length > 0
+      ) {
+        return res.status(400).json({ msg: "Canteen already added" });
+      }
+
+      // add canteen
+      user.favouriteCanteens.unshift({ canteen: req.params.id });
+
+      // save
+      user.save().then((user) => {
+        user.populate("favouriteCanteens.canteen", (err, user) => {
+          res.json(user.favouriteCanteens);
+        });
+      });
+    });
+  }
+);
+
+// @route   DELETE api/users/favourite/canteen/:id
+// @desc    Delete favourite canteen
+// @access  Private
+router.delete(
+  "/favourite/canteen/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findOne({ _id: req.user.id }).then((user) => {
+      if (
+        user.favouriteCanteens.filter(
+          (canteen) => canteen.canteen.toString() === req.params.id
+        ).length === 0
+      ) {
+        return res.status(404).json({ msg: "Canteen not found " });
+      }
+
+      // remove index
+      const removeIndex = user.favouriteCanteens
+        .map((canteen) => canteen.canteen.toString())
+        .indexOf(req.params.id);
+
+      // remove
+      user.favouriteCanteens.splice(removeIndex, 1);
+
+      // save
+      user.save().then((user) => {
+        user.populate("favouriteCanteens.canteen", (err, user) => {
+          res.json(user.favouriteCanteens);
+        });
+      });
+    });
+  }
+);
+
+// @route   GET api/users/favourite/meal
+// @desc    Get favourite meals
+// @access  Private
+router.get(
+  "/favourite/meal",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id)
+      .populate("favouriteMeals.canteen")
+      .then((user) => res.json(user.favouriteMeals));
+  }
+);
+
+// @route   POST api/users/favourite/meal/:id
+// @desc    Add favourite meal
+// @access  Private
+router.post(
+  "/favourite/meal/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then((user) => {
+      if (
+        user.favouriteMeals.filter(
+          (meal) => meal._id.toString() === req.params.id
+        ).length > 0
+      ) {
+        return res.status(400).json({ msg: "Meal already added" });
+      }
+      const newMeal = {
+        canteen: req.body._id,
+        _id: req.params.id,
+        id: req.body.id,
+        category: req.body.category,
+        name: req.body.name,
+        notes: req.body.notes,
+        prices: req.body.prices,
+      };
+
+      // add meal
+      user.favouriteMeals.unshift(newMeal);
+
+      // save
+      user.save().then((user) => {
+        user.populate("favouriteMeals.canteen", (err, user) => {
+          res.json(user.favouriteMeals);
+        });
+      });
+    });
+  }
+);
+
+// @route   DELETE api/users/favourite/meal/:id
+// @desc    Delete favourite meal
+// @access  Private
+router.delete(
+  "/favourite/meal/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then((user) => {
+      if (
+        user.favouriteMeals.filter(
+          (meal) => meal._id.toString() === req.params.id
+        ).length === 0
+      ) {
+        return res.status(404).json({ msg: "Meal not found" });
+      }
+
+      // remove index
+      const removeIndex = user.favouriteMeals
+        .map((meal) => meal._id.toString())
+        .indexOf(req.params.id);
+
+      // remove
+      user.favouriteMeals.splice(removeIndex, 1);
+
+      // save
+      user.save().then((user) => {
+        user.populate("favouriteMeals.canteen", (err, user) => {
+          res.json(user.favouriteMeals);
+        });
+      });
+    });
+  }
+);
 
 module.exports = router;
