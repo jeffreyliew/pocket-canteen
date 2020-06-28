@@ -3,7 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import { getCanteensByCity } from "../../actions/canteenActions";
+import { getCanteensByCity, clearCanteen } from "../../actions/canteenActions";
 
 import "./navbar.css";
 
@@ -20,6 +20,7 @@ class Navbar extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // update city input field after submit
     const { queryCity } = this.props.canteen;
     if (queryCity !== prevProps.canteen.queryCity) {
       this.setState({ city: queryCity === null ? "" : queryCity });
@@ -36,6 +37,7 @@ class Navbar extends Component {
     const { city } = this.state;
     let cityUpperCase;
 
+    // capitalize first letter
     if (city.length > 0) {
       cityUpperCase = city
         .split(" ")
@@ -51,6 +53,7 @@ class Navbar extends Component {
 
   onLogoutClick(e) {
     e.preventDefault();
+    this.props.clearCanteen();
     this.props.logoutUser();
   }
 
@@ -141,6 +144,7 @@ class Navbar extends Component {
 Navbar.propTypes = {
   getCanteensByCity: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
+  clearCanteen: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   canteen: PropTypes.object.isRequired,
 };
@@ -153,6 +157,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   getCanteensByCity,
   logoutUser,
+  clearCanteen,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));
