@@ -6,7 +6,9 @@ import {
   GET_DATES_OF_CURRENT_WEEK,
   GET_MEALS,
   GET_FAVOURITE_CANTEENS,
-  CLEAR_FAVOURITE_CANTEEN,
+  CLEAR_FAVOURITE_CANTEENS,
+  GET_FAVOURITE_MEALS,
+  CLEAR_FAVOURITE_MEALS,
 } from "../actions/types";
 
 const initialState = {
@@ -15,6 +17,7 @@ const initialState = {
   canteens: [],
   queryCity: "",
   favouriteCanteens: [],
+  favouriteMeals: [],
 };
 
 export default function (state = initialState, action) {
@@ -66,10 +69,20 @@ export default function (state = initialState, action) {
         ...state,
         favouriteCanteens: action.payload,
       };
-    case CLEAR_FAVOURITE_CANTEEN:
+    case GET_FAVOURITE_MEALS:
+      return {
+        ...state,
+        favouriteMeals: action.payload,
+      };
+    case CLEAR_FAVOURITE_CANTEENS:
       return {
         ...state,
         favouriteCanteens: [],
+      };
+    case CLEAR_FAVOURITE_MEALS:
+      return {
+        ...state,
+        favouriteMeals: [],
       };
     default:
       return state;

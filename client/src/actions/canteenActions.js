@@ -9,7 +9,9 @@ import {
   GET_DATES_OF_CURRENT_WEEK,
   GET_MEALS,
   GET_FAVOURITE_CANTEENS,
-  CLEAR_FAVOURITE_CANTEEN,
+  CLEAR_FAVOURITE_CANTEENS,
+  GET_FAVOURITE_MEALS,
+  CLEAR_FAVOURITE_MEALS,
 } from "./types";
 
 // get canteens by city
@@ -130,6 +132,34 @@ export const addCanteenToFavourite = (id) => (dispatch) => {
     });
 };
 
+// get favourite meals
+export const getFavouriteMeals = () => (dispatch) => {
+  axios.get("/api/users/favourite/meal").then((res) => {
+    dispatch({
+      type: GET_FAVOURITE_MEALS,
+      payload: res.data,
+    });
+  });
+};
+
+// add meal to favourite
+export const addMealToFavourite = (id, mealData) => (dispatch) => {
+  axios
+    .post(`/api/users/favourite/meal/${id}`, mealData)
+    .then((res) => {
+      dispatch({
+        type: GET_FAVOURITE_MEALS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
 // loading
 export const setCanteenLoading = () => {
   return {
@@ -142,9 +172,16 @@ export const setCity = (city) => {
   return { type: SET_QUERY_CITY, payload: city };
 };
 
-// clear canteen
-export const clearFavouriteCanteen = () => {
+// clear favourite canteens
+export const clearFavouriteCanteens = () => {
   return {
-    type: CLEAR_FAVOURITE_CANTEEN,
+    type: CLEAR_FAVOURITE_CANTEENS,
+  };
+};
+
+// clear favourite meals
+export const clearFavouriteMeals = () => {
+  return {
+    type: CLEAR_FAVOURITE_MEALS,
   };
 };
