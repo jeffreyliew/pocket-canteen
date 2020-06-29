@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import {
   getCanteensByCity,
-  clearFavouriteCanteen,
+  clearFavouriteCanteens,
+  clearFavouriteMeals,
 } from "../../actions/canteenActions";
 
 import "./navbar.css";
@@ -56,7 +57,8 @@ class Navbar extends Component {
 
   onLogoutClick(e) {
     e.preventDefault();
-    this.props.clearFavouriteCanteen();
+    this.props.clearFavouriteCanteens();
+    this.props.clearFavouriteMeals();
     this.props.logoutUser();
   }
 
@@ -146,8 +148,9 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
   getCanteensByCity: PropTypes.func.isRequired,
+  clearFavouriteCanteens: PropTypes.func.isRequired,
+  clearFavouriteMeals: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
-  clearFavouriteCanteen: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   canteen: PropTypes.object.isRequired,
 };
@@ -159,8 +162,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   getCanteensByCity,
+  clearFavouriteCanteens,
+  clearFavouriteMeals,
   logoutUser,
-  clearFavouriteCanteen,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));
