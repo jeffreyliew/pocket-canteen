@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import isEmpty from "../../validation/is-empty";
-import { getMeals, getCanteenById } from "../../actions/canteenActions";
+import {
+  getMeals,
+  getCanteenById,
+  getFavouriteMeals,
+} from "../../actions/canteenActions";
 
 import MealItem from "./MealItem";
 import Spinner from "../common/Spinner";
@@ -15,6 +19,10 @@ class Meals extends Component {
 
     this.props.getCanteenById(id);
     this.props.getMeals(id, query.get("date"));
+
+    if (this.props.auth.isAuthenticated) {
+      this.props.getFavouriteMeals();
+    }
   }
 
   render() {
@@ -128,11 +136,14 @@ class Meals extends Component {
 Meals.propTypes = {
   getCanteenById: PropTypes.func.isRequired,
   getMeals: PropTypes.func.isRequired,
+  getFavouriteMeals: PropTypes.func.isRequired,
   canteen: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   canteen: state.canteen,
   errors: state.errors,
 });
@@ -140,6 +151,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   getCanteenById,
   getMeals,
+  getFavouriteMeals,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Meals);
