@@ -73,6 +73,11 @@ class Navbar extends Component {
           </Link>
         </li>
         <li className="nav-item">
+          <Link className="nav-link" to="/favourite-meals">
+            Favourite Meals
+          </Link>
+        </li>
+        <li className="nav-item">
           <button
             type="button"
             onClick={this.onLogoutClick}
