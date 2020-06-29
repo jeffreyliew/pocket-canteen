@@ -12,10 +12,11 @@ class MealItem extends Component {
 
   onAddClick() {
     const { _id } = this.props.canteen.canteen;
-    const { id, name, category, notes, prices } = this.props.meal;
+    const { id, category, name, notes, prices } = this.props.meal;
 
     const meal = {
       canteenId: _id,
+      date: new Date(this.props.date).toDateString(),
       category,
       name,
       notes,

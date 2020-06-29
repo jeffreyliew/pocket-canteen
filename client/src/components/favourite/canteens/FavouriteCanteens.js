@@ -69,6 +69,7 @@ class FavouriteCanteens extends Component {
 
 FavouriteCanteens.propTypes = {
   getFavouriteCanteens: PropTypes.func.isRequired,
+  canteen: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

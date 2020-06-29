@@ -13,6 +13,7 @@ import store from "./store";
 
 import PrivateRoute from "./components/common/PrivateRoute";
 import FavouriteCanteens from "./components/favourite/canteens/FavouriteCanteens";
+import FavouriteMeals from "./components/favourite/meals/FavouriteMeals";
 
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
@@ -68,6 +69,10 @@ class App extends Component {
                   <PrivateRoute
                     path="/favourite-canteens"
                     component={FavouriteCanteens}
+                  />
+                  <PrivateRoute
+                    path="/favourite-meals"
+                    component={FavouriteMeals}
                   />
                   <Route path="*" component={NotFound} />
                 </Switch>
