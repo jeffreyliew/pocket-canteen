@@ -89,7 +89,7 @@ class Meals extends Component {
                     {sortedMeals[category].map((meal) => {
                       return (
                         <div key={meal.id} className="list-group-item">
-                          <MealItem meal={meal} />
+                          <MealItem meal={meal} date={query.get("date")} />
                         </div>
                       );
                     })}
