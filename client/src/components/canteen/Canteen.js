@@ -5,11 +5,13 @@ import { connect } from "react-redux";
 import {
   getCanteenById,
   getDatesOfCurrentWeek,
+  getFavouriteCanteens,
 } from "../../actions/canteenActions";
 import getCurrentWeek from "../../utils/getCurrentWeek";
 import isEmpty from "../../validation/is-empty";
 
 import Spinner from "../common/Spinner";
+import CanteenItem from "../canteens/CanteenItem";
 
 class Canteen extends Component {
   componentDidMount() {
@@ -17,11 +19,13 @@ class Canteen extends Component {
 
     this.props.getCanteenById(id);
     this.props.getDatesOfCurrentWeek(id, getCurrentWeek());
+
+    if (this.props.auth.isAuthenticated) this.props.getFavouriteCanteens();
   }
 
   render() {
     const { loading, canteen } = this.props.canteen;
-    const { id, name, city, address, week } = canteen;
+    const { id, name, week } = canteen;
 
     // get today's opening status
     let closedToday;
@@ -56,18 +60,10 @@ class Canteen extends Component {
         <>
           <div className="row">
             <div className="col-md-6 col-lg-4 mx-auto mb-3">
-              <div className="card">
-                <h5 className="card-header text-center text-white bg-dark">
-                  {name}
-                </h5>
-
-                <div className="card-body bg-light">
-                  <h6 className="card-title my-0">City</h6>
-                  <p className="card-text">{city}</p>
-                  <h6 className="card-title my-0">Address</h6>
-                  <p className="card-text">{address}</p>
-                </div>
-
+              <CanteenItem
+                canteenData={canteen}
+                headerStyles={"text-white bg-dark"}
+              >
                 {!isEmpty(week) && week.length === 5 && (
                   <div className="card-footer text-center">
                     <span
@@ -79,7 +75,7 @@ class Canteen extends Component {
                     </span>
                   </div>
                 )}
-              </div>
+              </CanteenItem>
             </div>
           </div>
           {!isEmpty(week) && week.length === 5 && (
@@ -91,14 +87,14 @@ class Canteen extends Component {
                       to={`/canteen/${id}/meals?date=${day.date}`}
                       key={day.date}
                       className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${
-                        today.indexOf(day.date) !== -1 ? "active" : ""
+                        today.indexOf(day.date) !== -1
+                          ? "border border-info bg-info text-white"
+                          : ""
                       } ${day.closed ? "disabled" : ""}`}
                     >
                       <div className="d-flex flex-column">
                         <span className="font-weight-bold">{day.day}</span>
-                        <small className="text-muted font-italic">
-                          {day.date}
-                        </small>
+                        <small className="font-italic">{day.date}</small>
                       </div>
                       <span
                         className={`badge badge-pill ${
@@ -147,11 +143,14 @@ class Canteen extends Component {
 Canteen.propTypes = {
   getDatesOfCurrentWeek: PropTypes.func.isRequired,
   getCanteenById: PropTypes.func.isRequired,
+  getFavouriteCanteens: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
   canteen: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   canteen: state.canteen,
   errors: state.errors,
 });
@@ -159,6 +158,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   getDatesOfCurrentWeek,
   getCanteenById,
+  getFavouriteCanteens,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Canteen);

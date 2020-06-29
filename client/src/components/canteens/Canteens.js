@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getCanteensByCity } from "../../actions/canteenActions";
+import { Link } from "react-router-dom";
+import {
+  getCanteensByCity,
+  getFavouriteCanteens,
+} from "../../actions/canteenActions";
 
 import Spinner from "../common/Spinner";
 import CanteenItem from "./CanteenItem";
@@ -31,6 +35,8 @@ class Canteens extends Component {
     }
 
     this.props.getCanteensByCity(city);
+
+    if (this.props.auth.isAuthenticated) this.props.getFavouriteCanteens();
   }
 
   onChange(e) {
@@ -61,7 +67,16 @@ class Canteens extends Component {
                     .indexOf(this.state.search.toLowerCase()) !== -1
               )
               .map((canteen) => (
-                <CanteenItem key={canteen._id} canteen={canteen} />
+                <div className="col mb-4" key={canteen._id}>
+                  <CanteenItem canteenData={canteen}>
+                    <Link
+                      to={`/canteen/${canteen.id}`}
+                      className="btn btn-info"
+                    >
+                      View Canteen
+                    </Link>
+                  </CanteenItem>
+                </div>
               ))}
           </div>
         );
@@ -111,17 +126,21 @@ class Canteens extends Component {
 
 Canteens.propTypes = {
   getCanteensByCity: PropTypes.func.isRequired,
+  getFavouriteCanteens: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
   canteen: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
+  auth: state.auth,
   canteen: state.canteen,
   errors: state.errors,
 });
 
 const mapDispatchToProps = {
   getCanteensByCity,
+  getFavouriteCanteens,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Canteens);
