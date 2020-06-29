@@ -185,15 +185,14 @@ router.post(
     User.findById(req.user.id).then((user) => {
       if (
         user.favouriteMeals.filter(
-          (meal) => meal._id.toString() === req.params.id
+          (meal) => meal.id.toString() === req.params.id
         ).length > 0
       ) {
         return res.status(400).json({ msg: "Meal already added" });
       }
       const newMeal = {
-        canteen: req.body._id,
-        _id: req.params.id,
-        id: req.body.id,
+        canteen: req.body.canteenId,
+        id: req.params.id,
         category: req.body.category,
         name: req.body.name,
         notes: req.body.notes,
@@ -223,7 +222,7 @@ router.delete(
     User.findById(req.user.id).then((user) => {
       if (
         user.favouriteMeals.filter(
-          (meal) => meal._id.toString() === req.params.id
+          (meal) => meal.id.toString() === req.params.id
         ).length === 0
       ) {
         return res.status(404).json({ msg: "Meal not found" });
@@ -231,7 +230,7 @@ router.delete(
 
       // remove index
       const removeIndex = user.favouriteMeals
-        .map((meal) => meal._id.toString())
+        .map((meal) => meal.id.toString())
         .indexOf(req.params.id);
 
       // remove

@@ -32,10 +32,6 @@ const UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "canteen",
       },
-      _id: {
-        type: Number,
-        required: true,
-      },
       id: {
         type: Number,
         required: true,
