@@ -3,7 +3,10 @@ import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import { getCanteensByCity, clearCanteen } from "../../actions/canteenActions";
+import {
+  getCanteensByCity,
+  clearFavouriteCanteen,
+} from "../../actions/canteenActions";
 
 import "./navbar.css";
 
@@ -53,7 +56,7 @@ class Navbar extends Component {
 
   onLogoutClick(e) {
     e.preventDefault();
-    this.props.clearCanteen();
+    this.props.clearFavouriteCanteen();
     this.props.logoutUser();
   }
 
@@ -144,7 +147,7 @@ class Navbar extends Component {
 Navbar.propTypes = {
   getCanteensByCity: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
-  clearCanteen: PropTypes.func.isRequired,
+  clearFavouriteCanteen: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   canteen: PropTypes.object.isRequired,
 };
@@ -157,7 +160,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   getCanteensByCity,
   logoutUser,
-  clearCanteen,
+  clearFavouriteCanteen,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar));

@@ -9,7 +9,7 @@ import {
   GET_DATES_OF_CURRENT_WEEK,
   GET_MEALS,
   GET_FAVOURITE_CANTEENS,
-  CLEAR_CANTEEN,
+  CLEAR_FAVOURITE_CANTEEN,
 } from "./types";
 
 // get canteens by city
@@ -143,8 +143,8 @@ export const setCity = (city) => {
 };
 
 // clear canteen
-export const clearCanteen = () => {
+export const clearFavouriteCanteen = () => {
   return {
-    type: CLEAR_CANTEEN,
+    type: CLEAR_FAVOURITE_CANTEEN,
   };
 };
