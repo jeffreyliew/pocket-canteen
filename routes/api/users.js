@@ -192,6 +192,7 @@ router.post(
       }
       const newMeal = {
         canteen: req.body.canteenId,
+        date: req.body.date,
         id: req.params.id,
         category: req.body.category,
         name: req.body.name,

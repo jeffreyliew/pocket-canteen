@@ -32,6 +32,10 @@ const UserSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "canteen",
       },
+      date: {
+        type: String,
+        required: true,
+      },
       id: {
         type: Number,
         required: true,
@@ -51,15 +55,12 @@ const UserSchema = new Schema({
       prices: {
         students: {
           type: Number,
-          required: true,
         },
         employees: {
           type: Number,
-          required: true,
         },
         others: {
           type: Number,
-          required: true,
         },
       },
     },
