@@ -9,6 +9,7 @@ import {
   CLEAR_FAVOURITE_CANTEENS,
   GET_FAVOURITE_MEALS,
   CLEAR_FAVOURITE_MEALS,
+  FAVOURITE_CANTEENS_LOADING,
 } from "../actions/types";
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   queryCity: "",
   favouriteCanteens: [],
   favouriteMeals: [],
+  favouriteCanteensLoading: false,
 };
 
 export default function (state = initialState, action) {
@@ -26,6 +28,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: true,
+      };
+    case FAVOURITE_CANTEENS_LOADING:
+      return {
+        ...state,
+        favouriteCanteensLoading: true,
       };
     case GET_CANTEEN:
       return {
@@ -68,6 +75,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         favouriteCanteens: action.payload,
+        favouriteCanteensLoading: false,
       };
     case GET_FAVOURITE_MEALS:
       return {

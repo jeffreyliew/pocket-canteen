@@ -12,6 +12,7 @@ import {
   CLEAR_FAVOURITE_CANTEENS,
   GET_FAVOURITE_MEALS,
   CLEAR_FAVOURITE_MEALS,
+  FAVOURITE_CANTEENS_LOADING,
 } from "./types";
 
 // get canteens by city
@@ -106,6 +107,7 @@ export const getMeals = (id, date) => (dispatch) => {
 
 // get favourite canteens
 export const getFavouriteCanteens = () => (dispatch) => {
+  dispatch(setFavouriteCanteenLoading());
   axios.get("/api/users/favourite/canteen").then((res) => {
     dispatch({
       type: GET_FAVOURITE_CANTEENS,
@@ -164,6 +166,13 @@ export const addMealToFavourite = (id, mealData) => (dispatch) => {
 export const setCanteenLoading = () => {
   return {
     type: CANTEEN_LOADING,
+  };
+};
+
+// loading
+export const setFavouriteCanteenLoading = () => {
+  return {
+    type: FAVOURITE_CANTEENS_LOADING,
   };
 };
 
