@@ -24,6 +24,7 @@ class Canteens extends Component {
     const query = new URLSearchParams(this.props.location.search);
     let city;
 
+    // capitalizes city query and displays it on navbar's input field
     if (query.get("city") !== null) {
       city = query
         .get("city")

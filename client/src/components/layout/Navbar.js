@@ -41,7 +41,7 @@ class Navbar extends Component {
     const { city } = this.state;
     let cityUpperCase;
 
-    // capitalize first letter
+    // capitalizes city query and displays it on navbar's input field
     if (city.length > 0) {
       cityUpperCase = city
         .split(" ")
