@@ -31,7 +31,7 @@ class FavouriteCanteens extends Component {
           <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
             {favouriteCanteens.map(({ canteen }) => (
               <div className="col mb-4" key={canteen._id}>
-                <CanteenItem canteenData={canteen}>
+                <CanteenItem canteenData={canteen} deleteBtn={true}>
                   <Link to={`/canteen/${canteen.id}`} className="btn btn-info">
                     View Canteen
                   </Link>

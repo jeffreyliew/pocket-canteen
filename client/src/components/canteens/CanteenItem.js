@@ -1,17 +1,25 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addCanteenToFavourite } from "../../actions/canteenActions";
+import {
+  addCanteenToFavourite,
+  deleteFavouriteCanteen,
+} from "../../actions/canteenActions";
 
 class CanteenItem extends Component {
   constructor(props) {
     super(props);
 
     this.onAddClick = this.onAddClick.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
   }
 
   onAddClick() {
     this.props.addCanteenToFavourite(this.props.canteenData._id);
+  }
+
+  onDeleteClick() {
+    this.props.deleteFavouriteCanteen(this.props.canteenData._id);
   }
 
   render() {
@@ -24,7 +32,7 @@ class CanteenItem extends Component {
       (canteen) => canteen.canteen._id
     );
 
-    const addCanteenButtonStyle = {
+    const buttonStyle = {
       position: "absolute",
       top: "0%",
       left: "100%",
@@ -39,13 +47,23 @@ class CanteenItem extends Component {
             type="button"
             className="btn btn-secondary py-0 px-2 border border-secondary rounded"
             disabled={auth.isAuthenticated ? false : true}
-            style={addCanteenButtonStyle}
+            style={buttonStyle}
             onClick={this.onAddClick}
           >
             <i className="fas fa-plus" />
           </button>
+        ) : this.props.deleteBtn ? (
+          <button
+            type="button"
+            className="bg-light border-0 p-0 text-danger rounded-circle"
+            disabled={auth.isAuthenticated ? false : true}
+            style={buttonStyle}
+            onClick={this.onDeleteClick}
+          >
+            <i className="far fa-times-circle fa-2x" />
+          </button>
         ) : (
-          <div className="text-success" style={addCanteenButtonStyle}>
+          <div className="text-success" style={buttonStyle}>
             <i className="far fa-check-circle fa-2x" />
           </div>
         )}
@@ -71,6 +89,7 @@ class CanteenItem extends Component {
 
 CanteenItem.propTypes = {
   addCanteenToFavourite: PropTypes.func.isRequired,
+  deleteFavouriteCanteen: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   canteen: PropTypes.object.isRequired,
   canteenData: PropTypes.object.isRequired,
@@ -83,6 +102,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   addCanteenToFavourite,
+  deleteFavouriteCanteen,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CanteenItem);
