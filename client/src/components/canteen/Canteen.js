@@ -24,7 +24,7 @@ class Canteen extends Component {
   }
 
   render() {
-    const { loading, canteen } = this.props.canteen;
+    const { loading, canteen, queryCity } = this.props.canteen;
     const { id, name, week } = canteen;
 
     // get today's opening status
@@ -118,7 +118,16 @@ class Canteen extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-6">
-              <Link to="/canteen" className="btn btn-light mb-3 float-left">
+              <Link
+                to={`/canteen${
+                  queryCity
+                    ? queryCity.length > 0
+                      ? `?city=${queryCity.toLowerCase()}`
+                      : ""
+                    : ""
+                }`}
+                className="btn btn-light mb-3 float-left"
+              >
                 Back To Canteens
               </Link>
             </div>
