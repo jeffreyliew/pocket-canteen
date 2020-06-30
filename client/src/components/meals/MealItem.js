@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addMealToFavourite } from "../../actions/canteenActions";
+import {
+  addMealToFavourite,
+  deleteFavouriteMeal,
+} from "../../actions/canteenActions";
 
 class MealItem extends Component {
   constructor(props) {
     super(props);
 
     this.onAddClick = this.onAddClick.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
   }
 
   onAddClick() {
@@ -25,6 +29,10 @@ class MealItem extends Component {
     this.props.addMealToFavourite(id, meal);
   }
 
+  onDeleteClick() {
+    this.props.deleteFavouriteMeal(this.props.meal.id);
+  }
+
   render() {
     const { auth, meal } = this.props;
 
@@ -38,7 +46,7 @@ class MealItem extends Component {
     // get meal ids of the favourite meals
     const mealIDs = this.props.canteen.favouriteMeals.map((meal) => meal.id);
 
-    const addCanteenButtonStyle = {
+    const buttonStyle = {
       position: "absolute",
       top: "0%",
       left: "100%",
@@ -78,13 +86,23 @@ class MealItem extends Component {
             type="button"
             className="btn btn-secondary py-0 px-2 border border-secondary rounded"
             disabled={auth.isAuthenticated ? false : true}
-            style={addCanteenButtonStyle}
+            style={buttonStyle}
             onClick={this.onAddClick}
           >
             <i className="fas fa-plus" />
           </button>
+        ) : this.props.deleteBtn ? (
+          <button
+            type="button"
+            className="bg-light border-0 p-0 text-danger rounded-circle"
+            disabled={auth.isAuthenticated ? false : true}
+            style={buttonStyle}
+            onClick={this.onDeleteClick}
+          >
+            <i className="far fa-times-circle fa-2x" />
+          </button>
         ) : (
-          <div className="text-success" style={addCanteenButtonStyle}>
+          <div className="text-success" style={buttonStyle}>
             <i className="far fa-check-circle fa-2x" />
           </div>
         )}
@@ -95,6 +113,7 @@ class MealItem extends Component {
 
 MealItem.propTypes = {
   addMealToFavourite: PropTypes.func.isRequired,
+  deleteFavouriteMeal: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   canteen: PropTypes.object.isRequired,
 };
@@ -106,6 +125,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   addMealToFavourite,
+  deleteFavouriteMeal,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MealItem);

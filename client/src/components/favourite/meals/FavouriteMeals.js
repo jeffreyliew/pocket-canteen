@@ -42,7 +42,7 @@ class FavouriteMeals extends Component {
 
                   <div className="list-group list-group-flush">
                     <div className="list-group-item">
-                      <MealItem meal={meal} />
+                      <MealItem meal={meal} deleteBtn={true} />
                     </div>
                   </div>
                 </div>
