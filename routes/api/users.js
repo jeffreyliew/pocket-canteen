@@ -99,24 +99,24 @@ router.get(
   }
 );
 
-// @route   POST api/users/favourite/canteen/:id
+// @route   POST api/users/favourite/canteen/:_id
 // @desc    Add favourite canteen
 // @access  Private
 router.post(
-  "/favourite/canteen/:id",
+  "/favourite/canteen/:_id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     User.findOne({ _id: req.user.id }).then((user) => {
       if (
         user.favouriteCanteens.filter(
-          (canteen) => canteen.canteen.toString() === req.params.id
+          (canteen) => canteen.canteen.toString() === req.params._id
         ).length > 0
       ) {
         return res.status(400).json({ msg: "Canteen already added" });
       }
 
       // add canteen
-      user.favouriteCanteens.unshift({ canteen: req.params.id });
+      user.favouriteCanteens.unshift({ canteen: req.params._id });
 
       // save
       user.save().then((user) => {
@@ -128,17 +128,17 @@ router.post(
   }
 );
 
-// @route   DELETE api/users/favourite/canteen/:id
+// @route   DELETE api/users/favourite/canteen/:_id
 // @desc    Delete favourite canteen
 // @access  Private
 router.delete(
-  "/favourite/canteen/:id",
+  "/favourite/canteen/:_id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     User.findOne({ _id: req.user.id }).then((user) => {
       if (
         user.favouriteCanteens.filter(
-          (canteen) => canteen.canteen.toString() === req.params.id
+          (canteen) => canteen.canteen.toString() === req.params._id
         ).length === 0
       ) {
         return res.status(404).json({ msg: "Canteen not found " });
@@ -147,7 +147,7 @@ router.delete(
       // remove index
       const removeIndex = user.favouriteCanteens
         .map((canteen) => canteen.canteen.toString())
-        .indexOf(req.params.id);
+        .indexOf(req.params._id);
 
       // remove
       user.favouriteCanteens.splice(removeIndex, 1);

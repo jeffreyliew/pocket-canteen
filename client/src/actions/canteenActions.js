@@ -118,9 +118,27 @@ export const getFavouriteCanteens = () => (dispatch) => {
 };
 
 // add canteen to favourite
-export const addCanteenToFavourite = (id) => (dispatch) => {
+export const addCanteenToFavourite = (_id) => (dispatch) => {
   axios
-    .post(`/api/users/favourite/canteen/${id}`)
+    .post(`/api/users/favourite/canteen/${_id}`)
+    .then((res) => {
+      dispatch({
+        type: GET_FAVOURITE_CANTEENS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+// delete canteen from favourite
+export const deleteFavouriteCanteen = (_id) => (dispatch) => {
+  axios
+    .delete(`/api/users/favourite/canteen/${_id}`)
     .then((res) => {
       dispatch({
         type: GET_FAVOURITE_CANTEENS,
@@ -150,6 +168,24 @@ export const getFavouriteMeals = () => (dispatch) => {
 export const addMealToFavourite = (id, mealData) => (dispatch) => {
   axios
     .post(`/api/users/favourite/meal/${id}`, mealData)
+    .then((res) => {
+      dispatch({
+        type: GET_FAVOURITE_MEALS,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+// delete meal from favourite
+export const deleteFavouriteMeal = (id) => (dispatch) => {
+  axios
+    .delete(`/api/users/favourite/meal/${id}`)
     .then((res) => {
       dispatch({
         type: GET_FAVOURITE_MEALS,
