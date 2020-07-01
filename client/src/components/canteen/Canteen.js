@@ -25,7 +25,7 @@ class Canteen extends Component {
 
   render() {
     const { loading, canteen, queryCity } = this.props.canteen;
-    const { id, name, week } = canteen;
+    const { id, name, week, coordinates } = canteen;
 
     // get today's opening status
     let closedToday;
@@ -106,6 +106,23 @@ class Canteen extends Component {
                     </Link>
                   ))}
                 </div>
+              </div>
+            </div>
+          )}
+          {coordinates && (
+            <div className="row">
+              <div className="col-md-12 mb-3">
+                <iframe
+                  src={`https://www.google.com/maps?q=${coordinates.lat},${coordinates.long}&output=embed`}
+                  title="location"
+                  width="100%"
+                  height="450"
+                  frameBorder="0"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  aria-hidden="false"
+                  tabIndex="0"
+                />
               </div>
             </div>
           )}
