@@ -16,7 +16,11 @@ const Canteen = require("./models/Canteen");
 
 // redirect http to https
 app.use((req, res, next) => {
-  req.secure ? next() : res.redirect("https://" + req.headers.host + req.url);
+  if (req.secure) {
+    next();
+  } else {
+    res.redirect("https://" + req.headers.host + req.url);
+  }
 });
 
 // middleware
