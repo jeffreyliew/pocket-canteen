@@ -90,15 +90,6 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/canteen", canteen);
 
-// // redirect http to https
-// app.use((req, res, next) => {
-//   if (req.secure) {
-//     next();
-//   } else {
-//     res.redirect("https://" + req.headers.host + req.url);
-//   }
-// });
-
 // serve static assets if in production
 if (process.env.NODE_ENV === "production") {
   // set static folder
