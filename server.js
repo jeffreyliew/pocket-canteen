@@ -102,7 +102,7 @@ if (process.env.NODE_ENV === "production") {
 
 // redirect http to https
 app.use((req, res, next) => {
-  req.secure() ? next() : res.redirect("https://" + req.headers.host + req.url);
+  req.secure ? next() : res.redirect("https://" + req.headers.host + req.url);
 });
 
 const port = process.env.PORT || 5000;
