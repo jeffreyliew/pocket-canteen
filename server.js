@@ -14,6 +14,11 @@ const app = express();
 // model
 const Canteen = require("./models/Canteen");
 
+// redirect http to https
+app.use((req, res, next) => {
+  req.secure ? next() : res.redirect("https://" + req.headers.host + req.url);
+});
+
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -99,11 +104,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-
-// redirect http to https
-app.use((req, res, next) => {
-  req.secure ? next() : res.redirect("https://" + req.headers.host + req.url);
-});
 
 const port = process.env.PORT || 5000;
 
