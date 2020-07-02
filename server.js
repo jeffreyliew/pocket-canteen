@@ -14,15 +14,6 @@ const app = express();
 // model
 const Canteen = require("./models/Canteen");
 
-// redirect http to https
-app.use((req, res, next) => {
-  if (req.secure) {
-    next();
-  } else {
-    res.redirect("https://" + req.headers.host + req.url);
-  }
-});
-
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -98,6 +89,15 @@ require("./config/passport")(passport);
 // routes
 app.use("/api/users", users);
 app.use("/api/canteen", canteen);
+
+// redirect http to https
+app.use((req, res, next) => {
+  if (req.secure) {
+    next();
+  } else {
+    res.redirect("https://" + req.headers.host + req.url);
+  }
+});
 
 // serve static assets if in production
 if (process.env.NODE_ENV === "production") {
