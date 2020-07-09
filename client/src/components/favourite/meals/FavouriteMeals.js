@@ -37,7 +37,7 @@ class FavouriteMeals extends Component {
               {favouriteMeals.map((meal) => (
                 <div key={meal.id} className="card mb-3">
                   <h5 className="card-header text-center text-white bg-dark">
-                    {meal.canteen.name} - {meal.date}
+                    {meal.canteen.name} - {new Date(meal.date).toDateString()}
                   </h5>
 
                   <div className="list-group list-group-flush">

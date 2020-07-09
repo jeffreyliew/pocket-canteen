@@ -20,7 +20,7 @@ class MealItem extends Component {
 
     const meal = {
       canteenId: _id,
-      date: new Date(this.props.date).toDateString(),
+      date: this.props.date,
       category,
       name,
       notes,
