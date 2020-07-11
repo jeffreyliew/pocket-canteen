@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 class Landing extends Component {
   constructor(props) {
@@ -27,6 +29,8 @@ class Landing extends Component {
   }
 
   render() {
+    const { auth } = this.props;
+
     return (
       <div className="landing">
         <div className="dark-overlay landing-inner text-light">
@@ -64,12 +68,16 @@ class Landing extends Component {
                   </div>
                 </form>
 
-                <Link className="btn btn-lg btn-info mr-2" to="/register">
-                  Sign Up
-                </Link>
-                <Link className="btn btn-lg btn-light" to="/login">
-                  Login
-                </Link>
+                {!auth.isAuthenticated && (
+                  <>
+                    <Link className="btn btn-lg btn-info mr-2" to="/register">
+                      Sign Up
+                    </Link>
+                    <Link className="btn btn-lg btn-light" to="/login">
+                      Login
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -79,4 +87,12 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+Landing.propTypes = {
+  auth: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps)(Landing);
