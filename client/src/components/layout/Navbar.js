@@ -67,22 +67,38 @@ class Navbar extends Component {
 
     const authLinks = (
       <ul className="navbar-nav ml-auto">
-        <li className="nav-item mx-auto">
+        <li
+          className="nav-item mx-auto"
+          data-toggle="collapse"
+          data-target="#mobile-nav"
+        >
           <Link className="nav-link" to="/favourite-canteens">
             Favourite Canteens
           </Link>
         </li>
-        <li className="nav-item mx-auto">
+        <li
+          className="nav-item mx-auto"
+          data-toggle="collapse"
+          data-target="#mobile-nav"
+        >
           <Link className="nav-link" to="/favourite-meals">
             Favourite Meals
           </Link>
         </li>
-        <li className="nav-item mx-auto">
+        <li
+          className="nav-item mx-auto"
+          data-toggle="collapse"
+          data-target="#mobile-nav"
+        >
           <Link className="nav-link" to="/settings">
             Settings
           </Link>
         </li>
-        <li className="nav-item mx-auto">
+        <li
+          className="nav-item mx-auto"
+          data-toggle="collapse"
+          data-target="#mobile-nav"
+        >
           <button
             type="button"
             onClick={this.onLogoutClick}
@@ -97,12 +113,20 @@ class Navbar extends Component {
 
     const guestLinks = (
       <ul className="navbar-nav ml-auto">
-        <li className="nav-item mx-auto">
+        <li
+          className="nav-item mx-auto"
+          data-toggle="collapse"
+          data-target="#mobile-nav"
+        >
           <Link className="nav-link" to="/register">
             Sign Up
           </Link>
         </li>
-        <li className="nav-item mx-auto">
+        <li
+          className="nav-item mx-auto"
+          data-toggle="collapse"
+          data-target="#mobile-nav"
+        >
           <Link className="nav-link" to="/login">
             Login
           </Link>
