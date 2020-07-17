@@ -1,8 +1,92 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
+import urlBase64ToUint8Array from "../utils/urlBase64ToUint8Array";
 import jwt_decode from "jwt-decode";
 
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import {
+  GET_ERRORS,
+  SET_CURRENT_USER,
+  SET_PUSH_NOTIFICATION_MEALS,
+  GET_MEAL_PUSH_SETTING,
+  NOTIFICATION_SETTINGS_LOADING,
+} from "./types";
+
+const publicVapidKey =
+  "BBPEXjsgF_aEVqVznVsAlfsOXhHhrHNAfgCJncMXg11JPwMLo3eOwMuZk08x8sNtu49KrGsWMwPV9fxthSlwdlE";
+const convertedVapidKey = urlBase64ToUint8Array(publicVapidKey);
+
+// subscribe to push notifications
+export const subscribePushNotificationMeals = () => (dispatch) => {
+  dispatch(setNotificationSettingsLoading());
+
+  navigator.serviceWorker.ready.then((registration) => {
+    if (!registration.pushManager) {
+      alert("Push not supported");
+      return;
+    }
+
+    registration.pushManager
+      .subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: convertedVapidKey,
+      })
+      .then((subscription) =>
+        axios.post("/api/users/push/subscribe", subscription).then((res) => {
+          dispatch({
+            type: SET_PUSH_NOTIFICATION_MEALS,
+            payload: res.data,
+          });
+        })
+      )
+      .catch((err) => console.error(`Push subscription error: ${err}`));
+  });
+};
+
+// unsubscribe push notifications
+export const unsubscribePushNotificationMeals = () => (dispatch) => {
+  dispatch(setNotificationSettingsLoading());
+
+  navigator.serviceWorker.ready
+    .then((registration) => {
+      registration.pushManager.getSubscription().then((subscription) => {
+        if (!subscription) {
+          return;
+        }
+
+        subscription
+          .unsubscribe()
+          .then(() =>
+            axios.delete("/api/users/push/unsubscribe").then((res) => {
+              dispatch({
+                type: SET_PUSH_NOTIFICATION_MEALS,
+                payload: res.data,
+              });
+            })
+          )
+          .catch((err) => console.error(err));
+      });
+    })
+    .catch((err) => console.error(err));
+};
+
+// get settings
+export const getMealPushSetting = () => (dispatch) => {
+  axios.get("/api/users/settings/push/meals").then((res) => {
+    dispatch(setNotificationSettingsLoading());
+
+    dispatch({
+      type: GET_MEAL_PUSH_SETTING,
+      payload: res.data,
+    });
+  });
+};
+
+// notification settings loading
+export const setNotificationSettingsLoading = () => {
+  return {
+    type: NOTIFICATION_SETTINGS_LOADING,
+  };
+};
 
 // register
 export const registerUser = (userData, history) => (dispatch) => {

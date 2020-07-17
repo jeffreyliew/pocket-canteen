@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import PrivateRoute from "./components/common/PrivateRoute";
+import Settings from "./components/user/settings/Settings";
 import FavouriteCanteens from "./components/favourite/canteens/FavouriteCanteens";
 import FavouriteMeals from "./components/favourite/meals/FavouriteMeals";
 
@@ -66,6 +67,7 @@ class App extends Component {
                   <Route exact path="/canteen" component={Canteens} />
                   <Route path="/canteen/:id/meals" component={Meals} />
                   <Route path="/canteen/:id" component={Canteen} />
+                  <PrivateRoute path="/settings" component={Settings} />
                   <PrivateRoute
                     path="/favourite-canteens"
                     component={FavouriteCanteens}

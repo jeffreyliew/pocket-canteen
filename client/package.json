@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
+    "cra-append-sw": "^2.7.0",
     "jwt-decode": "^2.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -18,8 +19,8 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts start && cra-append-sw --mode dev ./custom-sw.js",
+    "build": "react-scripts build && cra-append-sw ./custom-sw.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
