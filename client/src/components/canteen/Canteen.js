@@ -45,6 +45,9 @@ class Canteen extends Component {
       }
     }
 
+    //delete
+    console.log(today);
+
     let canteenContent;
 
     if (loading) {
