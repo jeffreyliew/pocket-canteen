@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const axios = require("axios");
 const passport = require("passport");
 const path = require("path");
+const webpush = require("web-push");
 
 const isEmpty = require("./validation/is-empty");
 
@@ -10,6 +11,17 @@ const users = require("./routes/api/users");
 const canteen = require("./routes/api/canteen");
 
 const app = express();
+
+// vapid keys
+const publicVapidKey = require("./config/keys").publicVapidKey;
+const privateVapidKey = require("./config/keys").privateVapidKey;
+
+// web-push
+webpush.setVapidDetails(
+  "mailto:testdummyundefinednull123@test.test",
+  publicVapidKey,
+  privateVapidKey
+);
 
 // model
 const Canteen = require("./models/Canteen");

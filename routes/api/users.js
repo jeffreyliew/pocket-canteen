@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const webpush = require("web-push");
 const secretOrKey = require("../../config/keys").secretOrKey;
 
 // validation
@@ -243,6 +244,131 @@ router.delete(
           res.json(user.favouriteMeals);
         });
       });
+    });
+  }
+);
+
+// Push Notification
+
+// holds references to setInterval's Timeout object
+let intervals = {};
+let index = 1;
+
+// @route   GET api/users/settings/push/meals
+// @desc    Get push settings meals
+// @access  Private
+router.get(
+  "/settings/push/meals",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id)
+      .then((user) => {
+        if (user.settings.pushNotifications.meal.pushIntervalId) {
+          res.json({ mealNotification: true });
+        } else {
+          res.json({ mealNotification: false });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+);
+
+// @route   POST api/users/push/subscribe
+// @desc    Subscribe
+// @access  Private
+router.post(
+  "/push/subscribe",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id)
+      .populate("favouriteMeals.canteen")
+      .then((user) => {
+        // return if already subscribed
+        if (user.settings.pushNotifications.meal.pushIntervalId) {
+          return res.status(400).json({ msg: "Already subscribed" });
+        }
+
+        // get pushSubscription
+        const subscription = req.body;
+
+        // define callback
+        const cb = () => {
+          // get newest favouriteMeals of user
+          User.findById(req.user.id)
+            .populate("favouriteMeals.canteen")
+            .then((user) => {
+              // set favourite meals
+              let favouriteMeals = user.favouriteMeals;
+
+              // check if favouriteMeals is not empty
+              if (favouriteMeals.length > 0) {
+                // get today's date
+                const today = new Date(
+                  Date.now() - new Date().getTimezoneOffset() * 60000
+                ).toISOString();
+
+                // check if meal date matches today's date
+                const mealsToday = favouriteMeals.filter(
+                  (meal) => today.indexOf(meal.date) !== -1
+                );
+
+                // check if a favourite meal is sold today
+                if (mealsToday.length > 0) {
+                  mealsToday.forEach((meal) => {
+                    // create payload
+                    const payload = JSON.stringify({
+                      title: meal.name,
+                      body: meal.canteen.name,
+                      icon: "/logo192.png",
+                    });
+
+                    // send push notification
+                    webpush
+                      .sendNotification(subscription, payload)
+                      .catch((err) =>
+                        clearInterval(
+                          intervals[
+                            user.settings.pushNotifications.meal.pushIntervalId
+                          ]
+                        )
+                      );
+                  });
+                }
+              }
+            });
+        };
+
+        // setInterval
+        intervals[index] = setInterval(cb, 24 * 60 * 60 * 1000);
+
+        // save subscription, interval id
+        user.settings.pushNotifications.meal.pushSubscription = subscription;
+        user.settings.pushNotifications.meal.pushIntervalId = index;
+        user.save().then((user) => res.json({ mealNotification: true }));
+
+        // run once when subscribing
+        cb();
+
+        index++;
+      });
+  }
+);
+
+// @route   DELETE api/users/push/unsubscribe
+// @desc    Unsubscribe
+// @access  Private
+router.delete(
+  "/push/unsubscribe",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.findById(req.user.id).then((user) => {
+      user.settings.pushNotifications.meal.pushSubscription = null;
+      const intervalId = user.settings.pushNotifications.meal.pushIntervalId;
+      user.settings.pushNotifications.meal.pushIntervalId = null;
+      user.save().then((user) => res.json({ mealNotification: false }));
+
+      clearInterval(intervals[intervalId]);
+      delete intervals[intervalId];
     });
   }
 );

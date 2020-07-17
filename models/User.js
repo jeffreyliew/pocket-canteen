@@ -65,6 +65,18 @@ const UserSchema = new Schema({
       },
     },
   ],
+  settings: {
+    pushNotifications: {
+      meal: {
+        pushSubscription: {
+          type: Object,
+        },
+        pushIntervalId: {
+          type: Number,
+        },
+      },
+    },
+  },
 });
 
 module.exports = mongoose.model("users", UserSchema);
