@@ -308,7 +308,8 @@ router.post(
                 ).toISOString();
 
                 //delete
-                user.settings.pushNotifications.meal.today = today;
+                user.settings.pushNotifications.meal.today =
+                  new Date().getTimezoneOffset() * 60000;
                 user.save().then(() => {});
 
                 // check if meal date matches today's date
