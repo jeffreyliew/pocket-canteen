@@ -113,7 +113,7 @@ class Canteen extends Component {
             <div className="row">
               <div className="col-md-12 mb-3">
                 <iframe
-                  src={`https://www.google.com/maps?q=${coordinates.lat},${coordinates.long}&output=embed`}
+                  src={`https://www.google.com/maps?q=${name}&ll=${coordinates.lat},${coordinates.long}&z=16&output=embed`}
                   title="location"
                   width="100%"
                   height="450"
