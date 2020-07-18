@@ -307,12 +307,6 @@ router.post(
                   Date.now() - new Date().getTimezoneOffset() * 60000
                 ).toISOString();
 
-                //delete
-                user.settings.pushNotifications.meal.today = {
-                  date: new Date().getTimezoneOffset() * 60000,
-                };
-                user.save().then(() => {});
-
                 // check if meal date matches today's date
                 const mealsToday = favouriteMeals.filter(
                   (meal) => today.indexOf(meal.date) !== -1
