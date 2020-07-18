@@ -288,11 +288,11 @@ router.post(
           return res.status(400).json({ msg: "Already subscribed" });
         }
 
-        // get pushSubscription
-        const subscription = req.body;
+        // get pushSubscription, user timezoneOffset
+        const { subscription, timezoneOffset } = req.body;
 
-        // define callback
-        const cb = () => {
+        // define callback with closure
+        const cb = (timezoneOffset) => () => {
           // get newest favouriteMeals of user
           User.findById(req.user.id)
             .populate("favouriteMeals.canteen")
@@ -304,8 +304,12 @@ router.post(
               if (favouriteMeals.length > 0) {
                 // get today's date
                 const today = new Date(
-                  Date.now() - new Date().getTimezoneOffset() * 60000
+                  Date.now() - timezoneOffset
                 ).toISOString();
+
+                //delete
+                user.settings.pushNotifications.meal.today = today;
+                user.save().then(() => {});
 
                 // check if meal date matches today's date
                 const mealsToday = favouriteMeals.filter(
@@ -339,7 +343,7 @@ router.post(
         };
 
         // setInterval
-        intervals[index] = setInterval(cb, 24 * 60 * 60 * 1000);
+        intervals[index] = setInterval(cb(timezoneOffset), 24 * 60 * 60 * 1000);
 
         // save subscription, interval id
         user.settings.pushNotifications.meal.pushSubscription = subscription;
@@ -347,7 +351,7 @@ router.post(
         user.save().then((user) => res.json({ mealNotification: true }));
 
         // run once when subscribing
-        cb();
+        cb(timezoneOffset)();
 
         index++;
       });

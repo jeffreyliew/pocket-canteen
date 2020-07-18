@@ -68,6 +68,9 @@ const UserSchema = new Schema({
   settings: {
     pushNotifications: {
       meal: {
+        today: {
+          type: String,
+        },
         pushSubscription: {
           type: Object,
         },

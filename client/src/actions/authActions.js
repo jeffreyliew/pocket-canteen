@@ -31,12 +31,17 @@ export const subscribePushNotificationMeals = () => (dispatch) => {
         applicationServerKey: convertedVapidKey,
       })
       .then((subscription) =>
-        axios.post("/api/users/push/subscribe", subscription).then((res) => {
-          dispatch({
-            type: SET_PUSH_NOTIFICATION_MEALS,
-            payload: res.data,
-          });
-        })
+        axios
+          .post("/api/users/push/subscribe", {
+            subscription,
+            timezoneOffset: new Date().getTimezoneOffset() * 60000,
+          })
+          .then((res) => {
+            dispatch({
+              type: SET_PUSH_NOTIFICATION_MEALS,
+              payload: res.data,
+            });
+          })
       )
       .catch((err) => console.error(`Push subscription error: ${err}`));
   });
