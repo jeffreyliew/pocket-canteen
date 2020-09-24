@@ -138,7 +138,7 @@ class Navbar extends Component {
       <nav className="navbar sticky-top navbar-dark bg-dark">
         <div className="container">
           <Link className="navbar-brand" to="/">
-            Home
+            <i class="fas fa-utensils fa-lg" />
           </Link>
 
           {this.props.location.pathname !== "/" && (
