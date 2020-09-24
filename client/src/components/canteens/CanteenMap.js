@@ -119,7 +119,7 @@ class CanteenMap extends Component {
     return (
       <div className="row">
         <div className="col-md-12">
-          <div id="map" style={{ height: "600px" }} />
+          <div id="map" style={{ height: "70vh" }} />
         </div>
       </div>
     );

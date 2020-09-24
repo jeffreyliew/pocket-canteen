@@ -103,44 +103,46 @@ class Canteens extends Component {
     return (
       <div className="canteens">
         <div className="container">
-          <div className="row">
-            <div className="col-md-12 mb-3">
-              <h1 className="display-4 text-center">Canteens</h1>
-              <p className="lead text-center">
-                Browse and discover new canteens
-              </p>
-              <hr />
-              <div className="row">
-                <div className="col-9 col-sm-10 col-lg-6 offset-lg-3 mr-lg-auto my-3">
-                  {hideMap && (
-                    <div className="input-group">
-                      <input
-                        type="search"
-                        className="form-control"
-                        placeholder="Search canteen"
-                        name="search"
-                        value={this.state.search}
-                        onChange={this.onChange}
-                      />
-                    </div>
-                  )}
-                </div>
-                <div className="col-3 col-sm-2 col-lg-1 my-3">
-                  <button
-                    type="button"
-                    className="btn btn-light w-100"
-                    onClick={this.toggleMap}
-                  >
-                    <i
-                      className={`${
-                        hideMap
-                          ? "fas fa-map-marker-alt fa-lg"
-                          : "fas fa-times fa-lg"
-                      }`}
-                    />
-                  </button>
-                </div>
+          {hideMap && (
+            <div className="row">
+              <div className="col-md-12">
+                <h1 className="display-4 text-center">Canteens</h1>
+                <p className="lead text-center">
+                  Browse and discover new canteens
+                </p>
+                <hr />
               </div>
+            </div>
+          )}
+          <div className="row">
+            <div className="col-9 col-sm-10 col-lg-6 offset-lg-3 mr-lg-auto my-3">
+              {hideMap && (
+                <div className="input-group">
+                  <input
+                    type="search"
+                    className="form-control"
+                    placeholder="Search canteen"
+                    name="search"
+                    value={this.state.search}
+                    onChange={this.onChange}
+                  />
+                </div>
+              )}
+            </div>
+            <div className="col-3 col-sm-2 col-lg-1 my-3">
+              <button
+                type="button"
+                className="btn btn-light w-100"
+                onClick={this.toggleMap}
+              >
+                <i
+                  className={`${
+                    hideMap
+                      ? "fas fa-map-marker-alt fa-lg"
+                      : "fas fa-times fa-lg"
+                  }`}
+                />
+              </button>
             </div>
           </div>
           {hideMap ? canteensContent : <CanteenMap canteens={canteens} />}
