@@ -21,7 +21,7 @@ class Register extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.goBack();
+      this.props.history.push("/");
     }
   }
 
@@ -93,7 +93,11 @@ class Register extends Component {
                   onChange={this.onChange}
                   error={errors.password2}
                 />
-                <input type="submit" className="btn btn-info btn-block mt-4" />
+                <input
+                  type="submit"
+                  value="Submit"
+                  className="btn btn-info btn-block mt-4"
+                />
               </form>
             </div>
           </div>
